@@ -1,5 +1,6 @@
 package br.com.fullcycle.hexagonal.application.usecases;
 
+import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
 import br.com.fullcycle.hexagonal.models.Partner;
 import br.com.fullcycle.hexagonal.services.PartnerService;
 import org.junit.jupiter.api.Assertions;
@@ -31,9 +32,9 @@ class CreatePartnerUseCaseTest {
         when(partnerService.findByCnpj(expectedCnpj)).thenReturn(Optional.empty());
         when(partnerService.findByEmail(expectedEmail)).thenReturn(Optional.empty());
         when(partnerService.save(any())).thenAnswer(a -> {
-           var partner = a.getArgument(0, Partner.class);
-           partner.setId(UUID.randomUUID().getMostSignificantBits());
-           return partner;
+            var partner = a.getArgument(0, Partner.class);
+            partner.setId(UUID.randomUUID().getMostSignificantBits());
+            return partner;
         });
 
         final var useCase = new CreatePartnerUseCase(partnerService);
@@ -44,5 +45,64 @@ class CreatePartnerUseCaseTest {
         Assertions.assertEquals(expectedCnpj, output.cnpj());
         Assertions.assertEquals(expectedEmail, output.email());
         Assertions.assertEquals(expectedName, output.name());
+    }
+
+    @Test
+    @DisplayName("Não deve cadastrar um parceiro com CNPJ duplicado")
+    public void testCreateWithDuplicatedCNPJShouldFail() {
+        // given
+        final var expectedCnpj = "41536538000100";
+        final var expectedEmail = "john.doe@gmail.com";
+        final var expectedName = "John Doe";
+        final var expectedError = "Partner already exists";
+
+        final var createInput = new CreatePartnerUseCase.Input(expectedCnpj, expectedEmail, expectedName);
+
+        final var aPartner = new Partner();
+        aPartner.setId(UUID.randomUUID().getMostSignificantBits());
+        aPartner.setCnpj(expectedCnpj);
+        aPartner.setEmail(expectedEmail);
+        aPartner.setName(expectedName);
+
+        // when
+        final var partnerService = Mockito.mock(PartnerService.class);
+
+        when(partnerService.findByCnpj(expectedCnpj)).thenReturn(Optional.of(aPartner));
+
+        final var useCase = new CreatePartnerUseCase(partnerService);
+        final var actualException = Assertions.assertThrows(ValidationException.class, () -> useCase.execute(createInput));
+
+        // then
+        Assertions.assertEquals(expectedError, actualException.getMessage());
+    }
+
+    @Test
+    @DisplayName("Não deve cadastrar um parceiro com e-mail duplicado")
+    public void testCreateWithDuplicatedEmailShouldFail() {
+        // given
+        final var expectedCnpj = "41536538000100";
+        final var expectedEmail = "john.doe@gmail.com";
+        final var expectedName = "John Doe";
+        final var expectedError = "Partner already exists";
+
+        final var createInput = new CreatePartnerUseCase.Input(expectedCnpj, expectedEmail, expectedName);
+
+        final var aPartner = new Partner();
+        aPartner.setId(UUID.randomUUID().getMostSignificantBits());
+        aPartner.setCnpj(expectedCnpj);
+        aPartner.setEmail(expectedEmail);
+        aPartner.setName(expectedName);
+
+        // when
+        final var partnerService = Mockito.mock(PartnerService.class);
+
+        when(partnerService.findByCnpj(expectedCnpj)).thenReturn(Optional.empty());
+        when(partnerService.findByEmail(expectedEmail)).thenReturn(Optional.of(aPartner));
+
+        final var useCase = new CreatePartnerUseCase(partnerService);
+        final var actualException = Assertions.assertThrows(ValidationException.class, () -> useCase.execute(createInput));
+
+        // then
+        Assertions.assertEquals(expectedError, actualException.getMessage());
     }
 }
