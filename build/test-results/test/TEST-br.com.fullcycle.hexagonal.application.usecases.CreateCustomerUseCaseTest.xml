@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="br.com.fullcycle.hexagonal.application.usecases.CreateCustomerUseCaseTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2024-07-30T00:39:27" hostname="fernando-luizalabs" time="0.203">
-  <properties/>
-  <testcase name="Não deve cadastrar um cliente com e-mail duplicado" classname="br.com.fullcycle.hexagonal.application.usecases.CreateCustomerUseCaseTest" time="0.176"/>
-  <testcase name="Não deve cadastrar um cliente com CPF duplicado" classname="br.com.fullcycle.hexagonal.application.usecases.CreateCustomerUseCaseTest" time="0.004"/>
-  <testcase name="Deve criar um cliente" classname="br.com.fullcycle.hexagonal.application.usecases.CreateCustomerUseCaseTest" time="0.01"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
