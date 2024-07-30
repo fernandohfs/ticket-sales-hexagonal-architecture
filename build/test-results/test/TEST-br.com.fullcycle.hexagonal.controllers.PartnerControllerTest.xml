@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="br.com.fullcycle.hexagonal.controllers.PartnerControllerTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2024-07-30T00:39:30" hostname="fernando-luizalabs" time="0.111">
+  <properties/>
+  <testcase name="Deve obter um parceiro por id" classname="br.com.fullcycle.hexagonal.controllers.PartnerControllerTest" time="0.028"/>
+  <testcase name="Não deve cadastrar um parceiro com e-mail duplicado" classname="br.com.fullcycle.hexagonal.controllers.PartnerControllerTest" time="0.03"/>
+  <testcase name="Não deve cadastrar um parceiro com CNPJ duplicado" classname="br.com.fullcycle.hexagonal.controllers.PartnerControllerTest" time="0.024"/>
+  <testcase name="Deve criar um parceiro" classname="br.com.fullcycle.hexagonal.controllers.PartnerControllerTest" time="0.019"/>
+  <system-out><![CDATA[2024-07-29T21:39:30.513-03:00  INFO 181399 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [br.com.fullcycle.hexagonal.controllers.PartnerControllerTest]: PartnerControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2024-07-29T21:39:30.518-03:00  INFO 181399 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration br.com.fullcycle.hexagonal.Main for test class br.com.fullcycle.hexagonal.controllers.PartnerControllerTest
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0 where p1_0.cnpj=?
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0 where p1_0.email=?
+Hibernate: insert into partners (cnpj,email,name,id) values (?,?,?,default)
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0 where p1_0.id=?
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0
+Hibernate: delete from partners where id=?
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0 where p1_0.cnpj=?
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0 where p1_0.email=?
+Hibernate: insert into partners (cnpj,email,name,id) values (?,?,?,default)
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0 where p1_0.cnpj=?
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0 where p1_0.email=?
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0
+Hibernate: delete from partners where id=?
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0 where p1_0.cnpj=?
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0 where p1_0.email=?
+Hibernate: insert into partners (cnpj,email,name,id) values (?,?,?,default)
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0 where p1_0.cnpj=?
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0
+Hibernate: delete from partners where id=?
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0 where p1_0.cnpj=?
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0 where p1_0.email=?
+Hibernate: insert into partners (cnpj,email,name,id) values (?,?,?,default)
+Hibernate: select p1_0.id,p1_0.cnpj,p1_0.email,p1_0.name from partners p1_0
+Hibernate: delete from partners where id=?
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
