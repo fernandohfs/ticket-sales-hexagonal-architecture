@@ -2,6 +2,7 @@ package br.com.fullcycle.hexagonal.controllers;
 
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
 import br.com.fullcycle.hexagonal.application.usecases.CreatePartnerUseCase;
+import br.com.fullcycle.hexagonal.application.usecases.GetPartnerByIdUseCase;
 import br.com.fullcycle.hexagonal.dtos.PartnerDTO;
 import br.com.fullcycle.hexagonal.models.Partner;
 import br.com.fullcycle.hexagonal.services.PartnerService;
@@ -35,12 +36,10 @@ public class PartnerController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> get(@PathVariable Long id) {
-        var partner = partnerService.findById(id);
-        if (partner.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(partner.get());
+        final var useCase = new GetPartnerByIdUseCase(partnerService);
+        return useCase.execute(new GetPartnerByIdUseCase.Input(id))
+                .map(ResponseEntity::ok)
+                .orElseGet(ResponseEntity.notFound()::build);
     }
 
 }
