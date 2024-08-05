@@ -37,7 +37,7 @@ public class EventController {
     public ResponseEntity<?> create(@RequestBody EventDTO dto) {
         try {
             final var partnerId = Objects.requireNonNull(dto.getPartner(), "Partner is required").getId();
-            final var useCase = new CreateEventUseCase(eventService, partnerService);
+            final var useCase = new CreateEventUseCase(partnerService, eventService);
             final var output = useCase.execute(new CreateEventUseCase.Input(dto.getDate(), dto.getName(), partnerId, dto.getTotalSpots()));
             return ResponseEntity.created(URI.create("/events/" + output.id())).body(output);
         } catch (ValidationException ex) {

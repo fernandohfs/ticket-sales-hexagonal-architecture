@@ -16,7 +16,7 @@ public class CreateEventUseCase
     private final PartnerService partnerService;
     private final EventService eventService;
 
-    public CreateEventUseCase(EventService eventService, PartnerService partnerService) {
+    public CreateEventUseCase(PartnerService partnerService, EventService eventService) {
         this.partnerService = Objects.requireNonNull(partnerService);
         this.eventService = Objects.requireNonNull(eventService);
     }
