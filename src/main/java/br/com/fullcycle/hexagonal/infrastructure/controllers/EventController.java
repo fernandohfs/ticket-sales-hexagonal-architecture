@@ -3,7 +3,7 @@ package br.com.fullcycle.hexagonal.infrastructure.controllers;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
 import br.com.fullcycle.hexagonal.application.usecases.CreateEventUseCase;
 import br.com.fullcycle.hexagonal.application.usecases.SubscribeCustomerToEventUseCase;
-import br.com.fullcycle.hexagonal.infrastructure.dtos.EventDTO;
+import br.com.fullcycle.hexagonal.infrastructure.dtos.NewEventDTO;
 import br.com.fullcycle.hexagonal.infrastructure.dtos.SubscribeDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,10 +32,9 @@ public class EventController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public ResponseEntity<?> create(@RequestBody EventDTO dto) {
+    public ResponseEntity<?> create(@RequestBody NewEventDTO dto) {
         try {
-            final var partnerId = Objects.requireNonNull(dto.getPartner(), "Partner is required").getId();
-            final var output = createEventUseCase.execute(new CreateEventUseCase.Input(dto.getDate(), dto.getName(), partnerId, dto.getTotalSpots()));
+            final var output = createEventUseCase.execute(new CreateEventUseCase.Input(dto.date(), dto.name(), dto.partnerId(), dto.totalSpots()));
             return ResponseEntity.created(URI.create("/events/" + output.id())).body(output);
         } catch (ValidationException ex) {
             return ResponseEntity.unprocessableEntity().body(ex.getMessage());
@@ -47,7 +46,7 @@ public class EventController {
     public ResponseEntity<?> subscribe(@PathVariable Long id, @RequestBody SubscribeDTO dto) {
         try {
             final var output =
-                    subscribeCustomerToEventUseCase.execute(new SubscribeCustomerToEventUseCase.Input(id, dto.getCustomerId()));
+                    subscribeCustomerToEventUseCase.execute(new SubscribeCustomerToEventUseCase.Input(id, dto.customerId()));
             return ResponseEntity.ok(output);
         } catch (ValidationException ex) {
             return ResponseEntity.unprocessableEntity().body(ex.getMessage());
