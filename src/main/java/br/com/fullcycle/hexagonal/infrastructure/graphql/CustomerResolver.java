@@ -2,7 +2,7 @@ package br.com.fullcycle.hexagonal.infrastructure.graphql;
 
 import br.com.fullcycle.hexagonal.application.usecases.CreateCustomerUseCase;
 import br.com.fullcycle.hexagonal.application.usecases.GetCustomerByIdUseCase;
-import br.com.fullcycle.hexagonal.infrastructure.dtos.CustomerDTO;
+import br.com.fullcycle.hexagonal.infrastructure.dtos.NewCustomerDTO;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -26,8 +26,8 @@ public class CustomerResolver {
     }
 
     @MutationMapping
-    public CreateCustomerUseCase.Output createCustomer(@Argument CustomerDTO input) {
-        return createCustomerUseCase.execute(new CreateCustomerUseCase.Input(input.getCpf(), input.getEmail(), input.getName()));
+    public CreateCustomerUseCase.Output createCustomer(@Argument NewCustomerDTO input) {
+        return createCustomerUseCase.execute(new CreateCustomerUseCase.Input(input.cpf(), input.email(), input.name()));
     }
 
     @QueryMapping
