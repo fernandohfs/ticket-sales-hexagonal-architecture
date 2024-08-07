@@ -13,22 +13,23 @@ import java.util.Objects;
 public class UseCaseConfig {
 
     private final CustomerService customerService;
-    private final PartnerService partnerService;
     private final EventService eventService;
+    private final PartnerService partnerService;
 
     public UseCaseConfig(
             final CustomerService customerService,
-            final PartnerService partnerService,
-            final EventService eventService
+            final EventService eventService,
+            final PartnerService partnerService
     ) {
         this.customerService = Objects.requireNonNull(customerService);
-        this.partnerService = Objects.requireNonNull(partnerService);
         this.eventService = Objects.requireNonNull(eventService);
+        this.partnerService = Objects.requireNonNull(partnerService);
     }
 
     @Bean
     public CreateCustomerUseCase createCustomerUseCase() {
-        return new CreateCustomerUseCase(customerService);
+        // TODO: Fix dependency
+        return new CreateCustomerUseCase(null);
     }
 
     @Bean
@@ -43,7 +44,8 @@ public class UseCaseConfig {
 
     @Bean
     public GetCustomerByIdUseCase getCustomerByIdUseCase() {
-        return new GetCustomerByIdUseCase(customerService);
+        // TODO: Fix dependency
+        return new GetCustomerByIdUseCase(null);
     }
 
     @Bean
