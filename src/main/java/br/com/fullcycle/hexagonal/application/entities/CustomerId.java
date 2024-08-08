@@ -6,6 +6,12 @@ import java.util.UUID;
 
 public record CustomerId(UUID value) {
 
+    public CustomerId {
+        if (value == null) {
+            throw new ValidationException("Invalid value for CustomerId");
+        }
+    }
+
     public static CustomerId unique() {
         return new CustomerId(UUID.randomUUID());
     }
