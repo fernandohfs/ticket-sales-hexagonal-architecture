@@ -4,6 +4,6 @@ public record NewEventDTO(
         String name,
         String date,
         Integer totalSpots,
-        Long partnerId
+        String partnerId
 ) {
 }
