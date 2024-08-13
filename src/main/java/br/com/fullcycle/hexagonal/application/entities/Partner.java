@@ -4,10 +4,10 @@ import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
 
 public class Partner {
 
-    private PartnerId partnerId;
-    private Name name;
-    private Cnpj cnpj;
-    private Email email;
+    private final PartnerId partnerId;
+    private final Name name;
+    private final Cnpj cnpj;
+    private final Email email;
 
     public Partner(final PartnerId partnerId, final String name, final String cnpj, final String email) {
         if (partnerId == null) {
