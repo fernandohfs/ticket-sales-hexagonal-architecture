@@ -1,46 +1,44 @@
 package br.com.fullcycle.hexagonal.application.usecases;
 
 import br.com.fullcycle.hexagonal.application.UseCase;
+import br.com.fullcycle.hexagonal.application.entities.Event;
+import br.com.fullcycle.hexagonal.application.entities.PartnerId;
 import br.com.fullcycle.hexagonal.application.exceptions.ValidationException;
-import br.com.fullcycle.hexagonal.infrastructure.models.Event;
-import br.com.fullcycle.hexagonal.infrastructure.services.EventService;
-import br.com.fullcycle.hexagonal.infrastructure.services.PartnerService;
+import br.com.fullcycle.hexagonal.application.repositories.EventRepository;
+import br.com.fullcycle.hexagonal.application.repositories.PartnerRepository;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class CreateEventUseCase
-        extends UseCase<CreateEventUseCase.Input, CreateEventUseCase.Output> {
+public class CreateEventUseCase extends UseCase<CreateEventUseCase.Input, CreateEventUseCase.Output> {
 
-    private final PartnerService partnerService;
-    private final EventService eventService;
+    private final EventRepository eventRepository;
+    private final PartnerRepository partnerRepository;
 
-    public CreateEventUseCase(PartnerService partnerService, EventService eventService) {
-        this.partnerService = Objects.requireNonNull(partnerService);
-        this.eventService = Objects.requireNonNull(eventService);
+    public CreateEventUseCase(final EventRepository eventRepository, final PartnerRepository partnerRepository) {
+        this.eventRepository = Objects.requireNonNull(eventRepository);
+        this.partnerRepository = Objects.requireNonNull(partnerRepository);
     }
 
     @Override
     public Output execute(final Input input) {
-        var event = new Event();
-        event.setDate(LocalDate.parse(input.date, DateTimeFormatter.ISO_DATE));
-        event.setName(input.name);
-        event.setTotalSpots(input.totalSpots);
+        final var aPartner = partnerRepository.partnerOfId(PartnerId.with(input.partnerId))
+                .orElseThrow(() -> new ValidationException("Partner not found"));
 
-        partnerService.findById(input.partnerId)
-                .ifPresentOrElse(event::setPartner, () -> {
-                    throw new ValidationException("Partner not found");
-                });
+        final var anEvent =
+                eventRepository.create(Event.newEvent(input.name, input.date, input.totalSpots, aPartner));
 
-        event = eventService.save(event);
-
-        return new Output(event.getId(), input.date, event.getName(), input.partnerId, input.totalSpots);
+        return new Output(
+                anEvent.eventId().value(),
+                input.date,
+                anEvent.name().value(),
+                anEvent.totalSpots(),
+                anEvent.partnerId().value()
+        );
     }
 
-    public record Input(String date, String name, Long partnerId, Integer totalSpots) {
+    public record Input(String date, String name, String partnerId, Integer totalSpots) {
     }
 
-    public record Output(Long id, String date, String name, Long partnerId, Integer totalSpots) {
+    public record Output(String id, String date, String name, int totalSpots, String partnerId) {
     }
 }

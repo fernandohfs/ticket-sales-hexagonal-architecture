@@ -1,6 +1,5 @@
 package br.com.fullcycle.hexagonal.infrastructure.controllers;
 
-import br.com.fullcycle.hexagonal.application.usecases.CreateCustomerUseCase;
 import br.com.fullcycle.hexagonal.application.usecases.CreateEventUseCase;
 import br.com.fullcycle.hexagonal.infrastructure.dtos.NewEventDTO;
 import br.com.fullcycle.hexagonal.infrastructure.dtos.SubscribeDTO;
@@ -60,7 +59,8 @@ class EventControllerTest {
     @Test
     @DisplayName("Deve criar um evento")
     public void testCreate() throws Exception {
-        var event = new NewEventDTO("Disney on Ice", "2021-01-01", 100, disney.getId());
+
+        var event = new NewEventDTO("Disney on Ice", "2021-01-01", 100, disney.getId().toString());
 
         final var result = this.mvc.perform(
                         MockMvcRequestBuilders.post("/events")
@@ -81,7 +81,8 @@ class EventControllerTest {
     @Transactional
     @DisplayName("Deve comprar um ticket de um evento")
     public void testReserveTicket() throws Exception {
-        var event = new NewEventDTO("Disney on Ice", "2021-01-01", 100, disney.getId());
+
+        var event = new NewEventDTO("Disney on Ice", "2021-01-01", 100, disney.getId().toString());
 
         final var createResult = this.mvc.perform(
                         MockMvcRequestBuilders.post("/events")
@@ -94,7 +95,7 @@ class EventControllerTest {
 
         var eventId = mapper.readValue(createResult, CreateEventUseCase.Output.class).id();
 
-        var sub = new SubscribeDTO(johnDoe.getId());
+        var sub = new SubscribeDTO(johnDoe.getId(), null);
 
         this.mvc.perform(
                         MockMvcRequestBuilders.post("/events/{id}/subscribe", eventId)
@@ -104,7 +105,7 @@ class EventControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn().getResponse().getContentAsByteArray();
 
-        var actualEvent = eventRepository.findById(eventId).get();
+        var actualEvent = eventRepository.findById(Long.parseLong(eventId)).get();
         Assertions.assertEquals(1, actualEvent.getTickets().size());
     }
 }
